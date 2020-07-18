@@ -10,7 +10,7 @@ loadfonts(device = "win")
 windowsFonts("Arial")
 
 # Read data frame
-cases <- read.csv2("Cases LATAM.csv")
+cases <- read.csv2("Cases AME.csv")
 
 # Serial interval (SI) with a mean of 7.5 and a standard deviation of 3.4
 # Incubation period: 5 days
@@ -285,7 +285,7 @@ G9
 salvador <- na.omit(cases$El.Salvador)
 pob = 6765753 # population size of the country
 
-estR0Salva <- estimate.R(salvador, mGT, begin=1, end=87, methods = "EG", pop.size=pob, nsim=1000)
+estR0Salva <- estimate.R(salvador, mGT, begin=1, end=87, methods = c("EG","ML","TD","AR","SB"), pop.size=pob, nsim=1000)
 estR0Salva$estimates$EG$R
 estR0Salva$estimates$EG$conf.int
 
@@ -404,9 +404,9 @@ R0est<- list(Argentina = estR0Arg, Bolivia = estR0Bol, Brazil = estR0Bra, Canada
 
 fx<- function(x) data.frame(R0 = x$estimates$ML$R, Li = x$estimates$ML$conf.int[1], Ls = x$estimates$ML$conf.int[2]) 
 
-datos_R0 <- lapply(R0est, fx) %>% ldply(.id = "País")
+datos_R0 <- lapply(R0est, fx) %>% ldply(.id = "PaÃ­s")
 
-G0 <- ggplot(datos_R0, aes(País)) +
+G0 <- ggplot(datos_R0, aes(PaÃ­s)) +
   geom_point(aes(y = R0), colour = "black") +
   geom_errorbar(aes(ymin = Li , ymax = Ls)) +
   theme_bw(20) +
